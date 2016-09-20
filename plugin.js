@@ -3,7 +3,7 @@
  * A jquery extension for creating jquery plugins
  * @author Mark McCann (www.markmccann.me)
  * @license MIT
- * @version 0.0.1
+ * @version 0.1.0
  * @require jQuery
  */
 
