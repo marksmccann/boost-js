@@ -23,8 +23,18 @@
         // 2. the source element's dataset – ie. data-[key]="[value]"
         // 3. the options passed in on init - ie. $([selector],[options])
         inst.settings = $.extend({}, defaults, Base.util.dataset(inst.source[0]), options );
-        // collect all references to this instance with it's id
+        // cache everything bound to source element
         inst.references = $( '[href="#'+inst.id+'"],[data-bind="#'+inst.id+'"]' );
+        // organize references by role for easier access
+        inst.roles = {};
+        inst.references.filter('[data-role]').each(function(){
+            // get the role name from element
+            var role = $(this).data('role');
+            // if role doesn't exists, create empty object
+            if( !inst.roles.hasOwnProperty(role) ) inst.roles[role] = $();
+            // add this element appropriate slot
+            inst.roles[role] = inst.roles[role].add(this);
+        });
         // return instance
         return inst;
     }
@@ -77,6 +87,16 @@
                     data[ inst.camelize(key) ] = inst.typify(e.dataset[key]);
                     return data;
                 }, {});
+            },
+            /**
+             * fires a callback if parameter is a function
+             * @param callback [function]
+             * @return scope [object]
+             */
+            call: function( callback, scope ) {
+                if( typeof callback === 'function' ) {
+                    callback.call( scope );
+                }
             }
         },
         /**
