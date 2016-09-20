@@ -15,14 +15,14 @@
     var Base = function( element, options, defaults ) {
         var inst = this;
         // the source element for this instance
-        inst.source = element;
+        inst.source = $(element);
         // get and set id for the instance
-        inst.id = $(inst.source).attr('id') || false;
+        inst.id = inst.source.attr('id') || false;
         // collect and define settings from:
         // 1. the default options defined at "add" method
         // 2. the source element's dataset – ie. data-[key]="[value]"
         // 3. the options passed in on init - ie. $([selector],[options])
-        inst.settings = $.extend({}, defaults, Base.util.dataset(inst.source), options );
+        inst.settings = $.extend({}, defaults, Base.util.dataset(inst.source[0]), options );
         // collect all references to this instance with it's id
         inst.references = $( '[href="#'+inst.id+'"],[data-bind="#'+inst.id+'"]' );
         // return instance
