@@ -1,5 +1,5 @@
 /*!
- * jquery-plugin-maker <https://github.com/marksmccann/jquery-plugin-maker>
+ * Boost JS <https://github.com/marksmccann/boost-js>
  *
  * Copyright (c) 2016, Mark McCann.
  * Licensed under the MIT License.
@@ -11,18 +11,18 @@
  * Converts any string into a "javascript-friendly" version.
  *
  * @param {string} str
- * @return {string}
+ * @return {string} camelized
  */
 var camelize = function( str ) {
     return str.toLowerCase()
-        // Replaces any - or _ characters with a space 
+        // Replaces any - or _ characters with a space
         .replace( /[-_]+/g, ' ')
-        // Removes any non alphanumeric characters 
+        // Removes any non alphanumeric characters
         .replace( /[^\w\s]/g, '')
-        // Uppercases the first character in each group   
-        // immediately following a space (delimited by spaces) 
+        // Uppercases the first character in each group
+        // immediately following a space (delimited by spaces)
         .replace( / (.)/g, function($1) { return $1.toUpperCase(); })
-        // Removes spaces 
+        // Removes spaces
         .replace( / /g, '' );
 }
 
@@ -30,11 +30,13 @@ var camelize = function( str ) {
  * Intelligently converts a string to integer or boolean.
  *
  * @param {string} str
- * @return {string|integer|boolean}
+ * @return {multi} str string|integer|boolean
  */
 var typify = function( str ) {
-    // if only whole numbers, convert to integer
-    if( /^\d*$/.test(str) ) return parseInt( str );
+    // if whole numbers, convert to integer
+    if( /^\d+$/.test(str) ) return parseInt( str );
+    // if decimal, convert to float
+    if( /^\d*\.\d+$/.test(str) ) return parseFloat( str );
     // if "true" or "false", return boolean
     if( /^true$/.test(str) ) return true;
     if( /^false$/.test(str) ) return false;
@@ -46,27 +48,18 @@ var typify = function( str ) {
  * Collects an element's data attributes, converts each value to type
  * and returns a set of key/value pairs.
  *
- * @param {object} e DOMelement
- * @return {object} [{label:value},...]
+ * @param {object} elem DOMelement
+ * @return {object} array [{label:value},...]
  */
-var dataset = function( e ) {
-    var inst = this;
-    return Object.keys( e.dataset ).reduce(function(data,key){
-        data[ camelize(key) ] = typify(e.dataset[key]);
-        return data;
-    }, {});
-}
-
-/**
- * generates a unique ID for a Plugin instance by either using the
- * source elem's id or a unique integer.
- *
- * @param {string} id
- * @return {string}
- */
-var uid = 0;
-var guid = function( id ) {
-    return id ? camelize(id) : (uid++).toString();
+var dataset = function( elem ) {
+    var data = {}, attr = elem.attributes;
+    for( var i in attr ) {
+        if( /^data-/.test(attr[i].name) ) {
+            var key = attr[i].name.replace(/^data-/,'');
+            data[ camelize(key) ] = typify( attr[i].value );
+        }
+    }
+    return data;
 }
 
 // -------------------------------------------------------------
@@ -74,11 +67,12 @@ var guid = function( id ) {
 /**
  * The base object; that all plugins inherit from
  *
- * @param {object} id
- * @param {object} id
- * @return {string}
+ * @param {object} element DOMelement
+ * @param {object} options app settings for instance
+ * @param {object} defaults app settings defaults
+ * @return {object} instance
  */
-var BasePlugin = function( element, options, defaults ) {
+var Boilerplate = function( element, options, defaults ) {
     // local var for instance
     var inst = this;
     // the source element for this instance
@@ -91,7 +85,7 @@ var BasePlugin = function( element, options, defaults ) {
     // 3. the options passed in on init - ie. $(...).myplugin({options})
     inst.settings = $.extend({}, defaults, dataset(inst.source[0]), options );
     // collect any element the refernces our source element
-    inst.references = $('[href="#'+inst.id+'"],[data-bind="#'+inst.id+'"]');
+    inst.references = (inst.id.length > 0) ? $('[href="#'+inst.id+'"],[data-bind="#'+inst.id+'"]') : $();
     // organize references by role for easier access
     inst.roles = {};
     inst.references.filter('[data-role]').each(function(){
@@ -107,21 +101,24 @@ var BasePlugin = function( element, options, defaults ) {
 }
 
 /**
- * Initializes a series of plugins.
+ * Initializes a plugin.
  *
- * @param {object} id
- * @param {object} id
- * @return {string}
+ * @param {object} elems DOMlist or jQuery
+ * @param {object} options settings for this instance
+ * @return {object} instance array of instances if more than one
  */
-BasePlugin.init = function( $elems, options ) {
+Boilerplate.init = function( elems, options ) {
     // an empty array to store all new instances
     var inits = [], Plugin = this;
     // loop through each element in query and initalize
-    $elems.each(function(){
+    $(elems).each(function(){
         // instantiate a new plugin
-        var inst = new Plugin( this, options );
+        var inst = new Plugin( this, options || {} );
         // store new instance in static variable with unique key
-        Plugin.instances[ guid(inst.id) ] = inst;
+        var id = inst.id.length > 0
+            ? camelize(inst.id)
+            : Object.keys(Plugin.instances).length.toString();
+        Plugin.instances[ id ] = inst;
         // add the instance to local array for return
         inits.push( inst );
     });
@@ -132,13 +129,13 @@ BasePlugin.init = function( $elems, options ) {
 /**
  * Creates a new plugin
  *
- * @param {object} MyPlugin Class or function for which plugin will be created
+ * @param {object} MyPlugin Class from which plugin will be created
  * @param {object} defaults Default settings for this plugin
- * @return {function}
+ * @return {object} instance
  */
 module.exports = function( MyPlugin, defaults ) {
 
-    // make sure a function has been passed in to 
+    // make sure a function has been passed in to
     // create a plugin from.
     if (typeof MyPlugin === 'function') {
 
@@ -151,7 +148,7 @@ module.exports = function( MyPlugin, defaults ) {
          * @return {object} instance
          */
         var Plugin = function( element, options ) {
-            BasePlugin.call( this, element, options || {}, defaults || {} );
+            Boilerplate.call( this, element, options || {}, defaults || {} );
             MyPlugin.call( this, element, options );
             return this;
         }
@@ -160,30 +157,32 @@ module.exports = function( MyPlugin, defaults ) {
         // set constructor method to Plugin
         Plugin.prototype.constructor = Plugin;
         // set a couple static variables
-        Plugin.init = BasePlugin.init;
+        Plugin.init = Boilerplate.init;
         Plugin.instances = {};
 
         /**
-         * An externalized object used to initialize the plugin and 
+         * An externalized object used to initialize the plugin and
          * provides external access to plugin.
          *
          * @param {object} options
          * @return {object} instance
          */
-        var Make = function( options ) {
+        var Boost = function( options ) {
             return Plugin.init.call( Plugin, this, options );
         }
         // externalize a couple vars by attaching them to obj
-        Make.init = Plugin.init;
-        Make.instances = Plugin.instances;
+        Boost.init = function( elems, options ) {
+            return Plugin.init.call( Plugin, elems, options );
+        }
+        Boost.instances = Plugin.instances;
 
-        // return the Make object
-        return Make;
+        // return the Boost object
+        return Boost;
 
     } else {
 
-        throw '\'jquery-plugin-maker\' requires a function as first paramater.';
-        
+        throw '\'Boost JS\' requires a function as first paramater.';
+
     }
 
 }

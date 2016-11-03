@@ -1,0 +1,35 @@
+{
+  "name": "boost-js",
+  "title": "Boost JS",
+  "version": "0.0.1",
+  "description": "A jQuery plugin generator with a few tricks up its sleeve.",
+  "main": "dist/boost.min.js",
+  "scripts": {
+    "start": "gulp",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marksmccann/boost-js.git"
+  },
+  "readme": "README",
+  "keywords": [
+    "jquery",
+    "plugin"
+  ],
+  "author": "“Mark McCann <“mail@markmccann.me”>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marksmccann/boost-js/issues"
+  },
+  "homepage": "https://github.com/marksmccann/boost-js",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-minify": "0.0.14",
+    "jsdom": "^9.8.3",
+    "jquery": "^3.1.1",
+    "mocha": "^3.1.2",
+    "mocha-jsdom": "^1.1.0"
+  }
+}

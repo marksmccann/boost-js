@@ -1,2 +1,144 @@
-# plugin.js
-A jQuery extension for creating jQuery plugins
+Boost JS
+==================================================
+
+A jQuery plugin generator with a few tricks up its sleeve.
+
+
+Installation
+--------------------------------------
+
+```bash
+npm install boost-js
+```
+
+
+Usage
+--------------------------------------
+### Create Plugin
+```javascript
+var boost = require('boost-js');
+
+function MyPlugin () {
+    // reserved attributes (see below for details)
+    this.source;
+    this.id;
+    this.settings;
+    this.references;
+    this.roles;
+}
+MyPlugin.prototype = {...};
+
+$.fn.myplugin = boost(MyPlugin, {}/* options */);
+```
+### Call Plugin
+```javascript
+$('div').myplugin({foo:'bar'});
+```
+
+
+Reserved Attributes
+--------------------------------------------
+There are 5 reserved attributes which you can reference within your plugin's constructor.
+
+### this.source
+The element used to intialize your plugin.
+
+### this.id
+The value of the source element's `id` or an empty string if there isn't one.
+```html
+<div id="foo"></div>
+```
+### this.settings
+Your plugin's settings are collected from three places, in order of priority:
+
+1. @creation (defaults)
+
+    ```javascript
+    $.fn.myplugin = boost(MyPlugin, {
+        foo: 'bar'
+    });
+    ```
+2. @data-attribute (on source element)
+
+    ```html
+    <div data-foo="bar"></div>
+    ```
+3. @instantiation
+
+    ```javascript
+    $('div').myplugin({
+        foo: 'bar'
+    });
+    ```
+
+### this.references
+You can easily associate any element with your plugin by referencing the id in a `href` or `data-bind` attribute.
+```html
+<div id="my-plugin"></div>
+<a href="#my-plugin">click me</a>
+<button data-bind="#my-plugin">click me</button>
+```
+```javascript
+var MyPlugin = function(){
+    this.references.on('click', function(){
+        console.log('hello world!');
+    });
+}
+```
+### this.roles
+You can also group your references by role with the `data-role` attribute.
+```html
+<div id="my-plugin"></div>
+<a href="#my-plugin">click me</a>
+<button data-bind="#my-plugin" data-role="trigger">click me</button>
+```
+```javascript
+var MyPlugin = function(){
+    this.roles['trigger'].on('click', function(){
+        console.log('hello world!');
+    });
+}
+```
+
+
+API
+--------------------------------------
+
+### boost( fn, [options] )
+`fn` will be called using a new keyword for each element the plugin is called for. `[options]` is an object literal which will define the default settings for every instantiation of the plugin.
+```javascript
+var MyPlugin = function() {...}
+$.fn.myplugin = boost( MyPlugin, {foo:'bar'} );
+```
+### $().myplugin( [options] )
+Your plugin will be instantiated on every element in the set, with the `options` overridding the values defined in the `boost()` method. Will return array if more than one instance is created.
+```javascript
+var inst = $('.some-class').myplugin( {foo:'bar'} );
+```
+
+### $.fn.myplugin.instances
+Each instance for a plugin is stored in an array. Boost Js uses the instance's id or it's position in the array as the key.
+```javascript
+var someInstance = $.fn.myplugin.instances.someId;
+```
+
+### $.fn.myplugin.init( [elems], [options] )
+You can also instantiate your plugin manually.
+```javascript
+var inst = $.fn.myplugin.init( document.getElementById('someId'), {foo:'bar'} )
+```
+
+
+Running Tests
+--------------------------------------
+
+```bash
+$ npm install -d && npm test
+```
+
+
+License
+--------------------------------------
+
+Copyright © 2016, [Mark McCann](https://github.com/marksmccann).
+Released under the [MIT license](LICENSE).
