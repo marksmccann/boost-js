@@ -1,8 +1,9 @@
-/*!
+/**
  * Boost JS <https://github.com/marksmccann/boost-js>
- *
- * Copyright (c) 2016, Mark McCann.
- * Licensed under the MIT License.
+ * A jQuery plugin generator with a few tricks up its sleeve.
+ * @author Mark McCann <http://www.markmccann.me>
+ * @license MIT
+ * @version 0.0.2
  */
 
 // -----------------------------------------------------------------
