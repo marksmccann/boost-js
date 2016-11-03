@@ -1,4 +1,4 @@
-Boost JS
+Boost JS [![Build Status](https://travis-ci.org/marksmccann/boost-js.svg?branch=master)](https://travis-ci.org/marksmccann/boost-js)
 ==================================================
 
 A jQuery plugin generator with a few tricks up its sleeve.
@@ -111,7 +111,7 @@ var MyPlugin = function() {...}
 $.fn.myplugin = boost( MyPlugin, {foo:'bar'} );
 ```
 ### $().myplugin( [options] )
-Your plugin will be instantiated on every element in the set, with the `options` overridding the values defined in the `boost()` method. Will return array if more than one instance is created.
+Your plugin will be instantiated on every element in the set, with the `options` overriding the values defined in the `boost()` method. Will return array if more than one instance is created.
 ```javascript
 var inst = $('.some-class').myplugin( {foo:'bar'} );
 ```
