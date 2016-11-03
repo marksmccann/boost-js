@@ -2,7 +2,7 @@
   "name": "boost-js",
   "title": "Boost JS",
   "version": "0.0.2",
-  "description": "A jQuery plugin generator with a few tricks up its sleeve.",
+  "description": "",
   "main": "dist/boost.min.js",
   "scripts": {
     "start": "gulp",
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/marksmccann/boost-js.git"
   },
-  "readme": "README.md",
+  "readme": "README",
   "keywords": [
     "jquery",
     "plugin"
