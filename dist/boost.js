@@ -3,7 +3,7 @@
  * A jQuery plugin generator with a few tricks up its sleeve.
  * @author Mark McCann <http://www.markmccann.me>
  * @license MIT
- * @version 0.0.2
+ * @version 0.2.0
  */
 
 // -----------------------------------------------------------------
