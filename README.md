@@ -125,7 +125,18 @@ var someInstance = $.fn.myplugin.instances.someId;
 ### $.fn.myplugin.init( [elems], [options] )
 You can also instantiate your plugin manually.
 ```javascript
-var inst = $.fn.myplugin.init( document.getElementById('someId'), {foo:'bar'} )
+var inst = $.fn.myplugin.init( document.getElementById('someId'), {foo:'bar'} );
+```
+
+### boost.auto()
+You can instantiate any of your plugins directly from the HTML via the `boost.auto` method. Run this method only once, and after your plugins have been defined.
+```javascript
+var boost = require('boost-js');
+boost.auto();
+```
+Now you can initialize directly from the element with the `[data-init]` attribute.
+```html
+    <div data-init="myplugin"></div>
 ```
 
 

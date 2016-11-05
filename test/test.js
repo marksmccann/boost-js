@@ -54,6 +54,33 @@ describe('Boost JS', function () {
             assert.equal( inst.getSource(), inst.source  );
         });
 
+
+
+    });
+
+    describe('auto', function () {
+
+        it('should init with valid [data-init] attr', function () {
+            document.body.innerHTML = '<div data-init="myplugin"></div>';
+            $.fn.myplugin = boost(MyPlugin);
+            boost.auto();
+            assert.lengthOf( Object.keys($.fn.myplugin.instances), 1 );
+        });
+
+        it('should init with hypenated/camelCased plugin name', function () {
+            document.body.innerHTML = '<div data-init="some-plugin"></div><div data-init="somePlugin"></div>';
+            $.fn.somePlugin = boost(MyPlugin);
+            boost.auto();
+            assert.lengthOf( Object.keys($.fn.somePlugin.instances), 2 );
+        });
+
+        it('should NOT init with unknown plugin name', function () {
+            document.body.innerHTML = '<div data-init="someplugin"></div>';
+            $.fn.myplugin = boost(MyPlugin);
+            boost.auto();
+            assert.lengthOf( Object.keys($.fn.myplugin.instances), 0 );
+        });
+
     });
 
     describe('source', function () {
@@ -169,14 +196,14 @@ describe('Boost JS', function () {
             assert.match( inst.references[0].nodeName, /A/i );
         });
 
-        it('should not collect elements without hash before id', function () {
+        it('should NOT collect elements without hash before id', function () {
             document.body.innerHTML = '<div id="foo"></div><button data-bind="foo"></button><a href="foo"></a>';
             $.fn.myplugin = boost(MyPlugin);
             var inst = $('div').myplugin();
             assert.lengthOf( inst.references, 0 );
         });
 
-        it('should not collect elements with no id', function () {
+        it('should NOT collect elements with no id', function () {
             document.body.innerHTML = '<div></div><a href="#"></a>';
             $.fn.myplugin = boost(MyPlugin);
             var inst = $('div').myplugin();
