@@ -15,7 +15,7 @@ describe('Boost JS', function () {
 
     before(function () {
         $ = require('jquery')
-        boost = require('../dist/boost.min.js')
+        boost = require('../src/boost.js')
     });
 
     describe('plugin', function () {
