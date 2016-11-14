@@ -114,7 +114,7 @@ describe('Boost JS', function () {
             document.body.innerHTML = '<div></div>';
             $.fn.myplugin = boost(MyPlugin);
             var inst = $('div').myplugin();
-            assert.lengthOf( inst.id, 0 );
+            assert.equals( inst.id, null );
         });
 
     });
