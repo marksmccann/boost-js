@@ -6,9 +6,13 @@ A jQuery plugin generator with a few tricks up its sleeve.
 
 Installation
 --------------------------------------
-
+Install with npm:
 ```bash
 npm install boost-js
+```
+Install in browser:
+```html
+<script src="https://cdn.rawgit.com/marksmccann/boost-js/master/dist/boost.min.js"></script>
 ```
 
 
@@ -17,6 +21,7 @@ Usage
 ### Create Plugin
 ```javascript
 var boost = require('boost-js');
+// var boost = $.fn.boost; (browser install)
 
 function MyPlugin () {
     // reserved attributes (see below for details)
@@ -41,13 +46,11 @@ Reserved Attributes
 There are 5 reserved attributes which you can reference within your plugin's constructor.
 
 ### this.source
-The element used to intialize your plugin.
+The element used to initialize your plugin.
 
 ### this.id
-The value of the source element's `id` or an empty string if there isn't one.
-```html
-<div id="foo"></div>
-```
+The value of the source element's `id` if present.
+
 ### this.settings
 Your plugin's settings are collected from three places, in order of priority:
 
@@ -89,7 +92,6 @@ var MyPlugin = function(){
 You can also group your references by role with the `data-role` attribute.
 ```html
 <div id="my-plugin"></div>
-<a href="#my-plugin">click me</a>
 <button data-bind="#my-plugin" data-role="trigger">click me</button>
 ```
 ```javascript
@@ -112,7 +114,7 @@ $.fn.myplugin = boost( MyPlugin, {foo:'bar'} );
 ```
 
 ### boost.auto()
-You can instantiate any plugin directly from the HTML after running the `boost.auto` method. It should be run only once and after all plugins have been defined.
+You can instantiate any plugin directly from the HTML after running the `boost.auto` method. It should only be run once and after all plugins have been defined.
 ```javascript
 var boost = require('boost-js');
 boost.auto();
@@ -129,7 +131,7 @@ var inst = $('.some-class').myplugin( {foo:'bar'} );
 ```
 
 ### $.fn.myplugin.instances
-Each instance for a plugin is stored in an array. Boost Js uses the instance's id or it's position in the array as the key.
+Each instance for a plugin is stored in an array. Boost JS uses the instance's id or it's position in the array as the key.
 ```javascript
 var someInstance = $.fn.myplugin.instances.someId;
 ```
@@ -145,7 +147,7 @@ Running Tests
 --------------------------------------
 
 ```bash
-$ npm install -d && npm test
+$ npm install && npm test
 ```
 
 

@@ -79,14 +79,14 @@ var Boilerplate = function( element, options, defaults ) {
     // the source element for this instance
     inst.source = $(element);
     // get and set id for the instance
-    inst.id = inst.source.attr('id') || '';
+    inst.id = inst.source.attr('id') || null;
     // collect and define settings from:
     // 1. the default options defined when plugin was created
     // 2. the source element's dataset – ie. data-[key]="[value]"
     // 3. the options passed in on init - ie. $(...).myplugin({options})
     inst.settings = $.extend({}, defaults, dataset(inst.source[0]), options );
     // collect any element the refernces our source element
-    inst.references = (inst.id.length > 0) ? $('[href="#'+inst.id+'"],[data-bind="#'+inst.id+'"]') : $();
+    inst.references = inst.id !== null ? $('[href="#'+inst.id+'"],[data-bind="#'+inst.id+'"]') : $();
     // organize references by role for easier access
     inst.roles = {};
     inst.references.filter('[data-role]').each(function(){
@@ -116,7 +116,7 @@ Boilerplate.init = function( elems, options ) {
         // instantiate a new plugin
         var inst = new Plugin( this, options || {} );
         // store new instance in static variable with unique key
-        var id = inst.id.length > 0
+        var id = inst.id !== null
             ? camelize(inst.id)
             : Object.keys(Plugin.instances).length.toString();
         Plugin.instances[ id ] = inst;
@@ -134,7 +134,7 @@ Boilerplate.init = function( elems, options ) {
  * @param {object} defaults Default settings for this plugin
  * @return {object} instance
  */
-var Boost = function( MyPlugin, defaults ) {
+var boost = function( MyPlugin, defaults ) {
 
     // make sure a function has been passed in to
     // create a plugin from.
@@ -196,7 +196,7 @@ var Boost = function( MyPlugin, defaults ) {
  * @return {object} instance
  */
 
-Boost.auto = function() {
+boost.auto = function() {
     // an empty array to collect the names of init-ed plugins
     var init = [];
     // loop through each element with a [data-init] attribute
@@ -214,5 +214,10 @@ Boost.auto = function() {
     });
 }
 
-// return boost object
-module.exports = Boost;
+// if node, return via module.exports
+if (typeof require === "function" && typeof exports === "object" && typeof module === "object") {
+    module.exports = boost;
+// otherwise, save object to jquery globally
+} else if( typeof window !== 'undefined' && typeof window.$ !== 'undefined' ) {
+    window.$.fn.boost = boost;
+}
