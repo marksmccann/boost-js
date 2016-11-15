@@ -131,13 +131,13 @@ var inst = $('.some-class').myplugin( {foo:'bar'} );
 ```
 
 ### $.fn.myplugin.instances
-Each instance for a plugin is stored in an array. Boost JS uses the instance's id or it's position in the array as the key.
+Each instance for a plugin is stored in an object literal. Boost JS uses the instance's id or it's position in the object as the key.
 ```javascript
 var someInstance = $.fn.myplugin.instances.someId;
 ```
 
 ### $.fn.myplugin.init( [elems], [options] )
-You can also instantiate your plugin manually.
+You can also access the init method directly to instantiate a plugin manually.
 ```javascript
 var inst = $.fn.myplugin.init( document.getElementById('someId'), {foo:'bar'} );
 ```
