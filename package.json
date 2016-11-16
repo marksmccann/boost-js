@@ -12,7 +12,6 @@
     "type": "git",
     "url": "https://github.com/marksmccann/boost-js.git"
   },
-  "readme": "README",
   "keywords": [
     "jquery",
     "plugin"
