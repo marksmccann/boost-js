@@ -12,7 +12,7 @@ npm install boost-js
 ```
 Install in browser:
 ```html
-<script src="https://cdn.rawgit.com/marksmccann/boost-js/master/dist/boost.min.js"></script>
+<script src="https://cdn.rawgit.com/marksmccann/boost-js/v0.3.2/dist/boost.min.js"></script>
 ```
 
 
