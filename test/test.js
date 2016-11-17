@@ -253,4 +253,17 @@ describe('Boost JS', function () {
 
     });
 
+    describe('defaults', function () {
+
+        it('should be accessible from jquery prototype', function () {
+            assert.isDefined($.fn.myplugin.defaults);
+        });
+
+        it('should be an object containing attributes and values from creation.', function () {
+            $.fn.myplugin = boost(MyPlugin,{foo:'bar'});
+            assert.match($.fn.myplugin.defaults.foo, /bar/);
+        });
+
+    });
+
 });

@@ -12,7 +12,7 @@ npm install boost-js
 ```
 Install in browser:
 ```html
-<script src="https://cdn.rawgit.com/marksmccann/boost-js/v0.3.3/dist/boost.min.js"></script>
+<script src="https://cdn.rawgit.com/marksmccann/boost-js/v0.4.0/dist/boost.min.js"></script>
 ```
 
 
@@ -117,6 +117,7 @@ $.fn.myplugin = boost( MyPlugin, {foo:'bar'} );
 You can instantiate any plugin directly from the HTML after running the `boost.auto` method. It should only be run once and after all plugins have been defined.
 ```javascript
 var boost = require('boost-js');
+// define plugins here ...
 boost.auto();
 ```
 Now you can initialize directly from an element via the `[data-init]` attribute.
@@ -130,16 +131,22 @@ Your plugin will be instantiated on every element in the set, with the `options`
 var inst = $('.some-class').myplugin( {foo:'bar'} );
 ```
 
-### $.fn.myplugin.instances
-Each instance for a plugin is stored in an object literal. Boost JS uses the instance's id or it's position in the object as the key.
-```javascript
-var someInstance = $.fn.myplugin.instances.someId;
-```
-
 ### $.fn.myplugin.init( [elems], [options] )
 You can also access the init method directly to instantiate a plugin manually.
 ```javascript
 var inst = $.fn.myplugin.init( document.getElementById('someId'), {foo:'bar'} );
+```
+
+### $.fn.myplugin.instances
+Each instance for a plugin is stored in an object. Boost JS uses the instance's id or it's position in the object as the key.
+```javascript
+var someInstance = $.fn.myplugin.instances.someId;
+```
+
+### $.fn.myplugin.defaults
+The default options for the plugin; the same as was passed in at creation.
+```javascript
+var defaultSettings = $.fn.myplugin.defaults;
 ```
 
 

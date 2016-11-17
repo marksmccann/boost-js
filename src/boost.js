@@ -3,7 +3,7 @@
  * A jQuery plugin generator with a few tricks up its sleeve.
  * @author Mark McCann <http://www.markmccann.me>
  * @license MIT
- * @version 0.3.3
+ * @version 0.4.0
  */
 
 (function(){
@@ -160,6 +160,7 @@
             // set a couple static variables
             Plugin.init = Boilerplate.init;
             Plugin.instances = {};
+            Plugin.defaults = defaults || {};
 
             /**
              * An externalized object used to initialize the plugin and
@@ -176,6 +177,7 @@
                 return Plugin.init.call( Plugin, elems, options );
             }
             Boost.instances = Plugin.instances;
+            Boost.defaults = Plugin.defaults;
 
             // return the Boost object
             return Boost;
@@ -195,7 +197,6 @@
      * @param {object} defaults Default settings for this plugin
      * @return {object} instance
      */
-
     boost.auto = function() {
         // an empty array to collect the names of init-ed plugins
         var init = [];
@@ -213,6 +214,9 @@
             }
         });
     }
+
+    // update the version number
+    boost.version = '0.4.0';
 
     // if node, return via module.exports
     if (typeof require === "function" && typeof exports === "object" && typeof module === "object") {
