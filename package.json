@@ -1,7 +1,7 @@
 {
   "name": "boost-js",
   "title": "Boost JS",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A jQuery plugin generator with a few tricks up its sleeve.",
   "main": "dist/boost.min.js",
   "scripts": {

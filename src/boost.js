@@ -3,7 +3,7 @@
  * A jQuery plugin generator with a few tricks up its sleeve.
  * @author Mark McCann <http://www.markmccann.me>
  * @license MIT
- * @version 0.4.0
+ * @version 0.4.1
  */
 
 (function(){
@@ -198,8 +198,8 @@
      * @return {object} instance
      */
     boost.auto = function() {
-        // an empty array to collect the names of init-ed plugins
-        var init = [];
+        // an empty array to collect the names of "init-ed" plugins
+        var inits = [];
         // loop through each element with a [data-init] attribute
         // and initialize the plugin in its value
         $('[data-init]').each(function(){
@@ -208,15 +208,17 @@
             var camelized = camelize(plugin);
             // make sure it hasn't already been init-ed and that it
             // exists on jQuery's prototype
-            if( init.indexOf(camelized) === -1 && typeof $.fn[camelized] !== 'undefined' ) {
+            if( inits.indexOf(camelized) === -1 && typeof $.fn[camelized] !== 'undefined' ) {
                 // initialize the specified plugin
                 $('[data-init="'+plugin+'"]')[camelized]();
+                // add plugin name to init list
+                inits.push(camelized);
             }
         });
     }
 
     // update the version number
-    boost.version = '0.4.0';
+    boost.version = '0.4.1';
 
     // if node, return via module.exports
     if (typeof require === "function" && typeof exports === "object" && typeof module === "object") {
