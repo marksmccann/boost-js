@@ -210,7 +210,7 @@
             // exists on jQuery's prototype
             if( inits.indexOf(camelized) === -1 && typeof $.fn[camelized] !== 'undefined' ) {
                 // initialize the specified plugin
-                $('[data-init="'+plugin+'"]')[camelized]();
+                $('[data-init="'+plugin+'"],[data-init="'+camelized+'"]')[camelized]();
                 // add plugin name to init list
                 inits.push(camelized);
             }
