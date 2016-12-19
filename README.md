@@ -12,7 +12,7 @@ npm install boost-js
 ```
 Install in browser:
 ```html
-<script src="https://cdn.rawgit.com/marksmccann/boost-js/v0.4.1/dist/boost.min.js"></script>
+<script src="https://cdn.rawgit.com/marksmccann/boost-js/v0.5.0/dist/boost.min.js"></script>
 ```
 
 
@@ -101,7 +101,7 @@ var MyPlugin = function(){
     });
 }
 ```
-
+*Add multiple roles to a single element by separating them with a pipe, i.e. `data-role="foo|bar"`.*
 
 API
 --------------------------------------

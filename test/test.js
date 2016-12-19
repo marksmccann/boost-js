@@ -54,8 +54,6 @@ describe('Boost JS', function () {
             assert.equal( inst.getSource(), inst.source  );
         });
 
-
-
     });
 
     describe('auto', function () {
@@ -226,6 +224,20 @@ describe('Boost JS', function () {
             assert.lengthOf( inst.roles.bar, 1 );
             assert.match( inst.roles.bar[0].nodeName, /A/i );
         });
+
+        it('should organize references with multiples values in "data-role"', function () {
+            document.body.innerHTML = '<div id="foo"></div><a href="#foo" data-role="foo|bar"></a>';
+            $.fn.myplugin = boost(MyPlugin);
+            var inst = $('#foo').myplugin();
+            assert.lengthOf( inst.references, 1 );
+            assert.isDefined( inst.roles.foo );
+            assert.lengthOf( inst.roles.foo, 1 );
+            assert.match( inst.roles.foo[0].nodeName, /A/i );
+            assert.isDefined( inst.roles.bar );
+            assert.lengthOf( inst.roles.bar, 1 );
+            assert.match( inst.roles.bar[0].nodeName, /A/i );
+        });
+
 
     });
 

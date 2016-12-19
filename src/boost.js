@@ -3,7 +3,7 @@
  * A jQuery plugin generator with a few tricks up its sleeve.
  * @author Mark McCann <http://www.markmccann.me>
  * @license MIT
- * @version 0.4.1
+ * @version 0.5.0
  */
 
 (function(){
@@ -90,12 +90,15 @@
         // organize references by role for easier access
         inst.roles = {};
         inst.references.filter('[data-role]').each(function(){
-            // get the role name from element
-            var role = $(this).data('role');
-            // if role doesn't exists, create empty object
-            if( !inst.roles.hasOwnProperty(role) ) inst.roles[role] = $();
-            // add this element to appropriate slot
-            inst.roles[role] = inst.roles[role].add(this);
+            // get the role name(s) from element
+            var roles = $(this).data('role').split('|');
+            // add element to each role attribute it belongs to
+            for( var i=0; i<roles.length; i++ ) {
+                // if role doesn't exists, create it
+                if( !inst.roles.hasOwnProperty(roles[i]) ) inst.roles[roles[i]] = $();
+                // add this element to appropriate slot
+                inst.roles[roles[i]] = inst.roles[roles[i]].add(this);
+            }
         });
         // return instance
         return this;
@@ -218,7 +221,7 @@
     }
 
     // update the version number
-    boost.version = '0.4.1';
+    boost.version = '0.5.0';
 
     // if node, return via module.exports
     if (typeof require === "function" && typeof exports === "object" && typeof module === "object") {
